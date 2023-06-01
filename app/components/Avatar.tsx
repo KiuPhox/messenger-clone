@@ -18,6 +18,8 @@ const Avatar: React.FC<AvatarProps> = ({ user, type }) => {
             return `h-8 w-8`
         else if (type === 'seen')
             return `h-4 w-4`
+        else if (type === 'drawer')
+            return `h-20 w-20`
     }
 
     const dotClass = () => {

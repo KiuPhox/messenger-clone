@@ -76,7 +76,7 @@ const ConversationBox: React.FC<ConversationBoxProps> = ({ data, selected }) => 
                     <p className={clsx('truncate text-xs', hasSeen ? 'text-gray-500' : 'text-black font-bold')}>{lastMessageText}</p>
                 </div>
             </div>
-            <span className={"block rounded-full bg-messenger bottom-1 right-0 w-2 h-2"}></span>
+            {!hasSeen && (<span className={"block rounded-full bg-messenger bottom-1 right-0 w-2 h-2"}></span>)}
         </div>
     )
 }
