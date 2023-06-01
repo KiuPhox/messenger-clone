@@ -7,7 +7,9 @@ module.exports = {
   ],
   theme: {
     extend: {
-
+      colors: {
+        'messenger': '#0084ff',
+      }
     },
   },
   plugins: [

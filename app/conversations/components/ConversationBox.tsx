@@ -45,8 +45,11 @@ const ConversationBox: React.FC<ConversationBoxProps> = ({ data, selected }) => 
     }, [userEmail, lastMessage])
 
     const lastMessageText = useMemo(() => {
+
         if (lastMessage?.image) {
-            return 'Sent an image'
+            if (lastMessage.sender.email !== session.data?.user?.email)
+                return lastMessage.sender.name + ' sent an image'
+            return 'You sent an image'
         }
 
         if (lastMessage?.body) {
@@ -55,17 +58,17 @@ const ConversationBox: React.FC<ConversationBoxProps> = ({ data, selected }) => 
 
         return 'Started a conversation'
 
-    }, [lastMessage])
+    }, [lastMessage, session.data?.user?.email])
 
     return (
-        <div className={clsx('w-full relative flex items-center space-x-3 hover:bg-neutral-100 rounded-lg transition cursor-pointer -ml-2 p-3',
+        <div className={clsx('w-full relative flex items-center space-x-3 hover:bg-neutral-200 rounded-lg transition cursor-pointer -ml-5 p-2',
             selected ? 'bg-neutral-100' : 'bg-white')}
             onClick={handleClick}>
             <Avatar user={otherUser} type='conversation' />
             <div className="min-w-0 flex-1">
                 <div className="focus:outline-none">
                     <div className="flex justify-between items-center mb-1">
-                        <p className="text-sm font-bold text-gray-900">{data.name || otherUser.name}</p>
+                        <p className={clsx("text-sm text-gray-900", hasSeen ? "font-semibold" : "font-bold")}>{data.name || otherUser.name}</p>
                         {lastMessage?.createdAt && (
                             <p className="text-xs text-gray-400 font-light">{format(new Date(lastMessage.createdAt), 'p')}</p>
                         )}
@@ -73,6 +76,7 @@ const ConversationBox: React.FC<ConversationBoxProps> = ({ data, selected }) => 
                     <p className={clsx('truncate text-xs', hasSeen ? 'text-gray-500' : 'text-black font-bold')}>{lastMessageText}</p>
                 </div>
             </div>
+            <span className={"block rounded-full bg-messenger bottom-1 right-0 w-2 h-2"}></span>
         </div>
     )
 }
