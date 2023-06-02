@@ -3,7 +3,7 @@
 import { FullConversationType } from "@/app/types"
 import { useCallback, useMemo } from "react"
 import { Conversation, Message, User } from "@prisma/client"
-import { format } from "date-fns"
+import { format, formatDistance, subDays } from "date-fns"
 import { useSession } from "next-auth/react"
 import clsx from "clsx"
 import useOtherUser from "@/app/hooks/useOtherUser"
@@ -53,7 +53,10 @@ const ConversationBox: React.FC<ConversationBoxProps> = ({ data, selected }) => 
         }
 
         if (lastMessage?.body) {
-            return lastMessage.body
+            if (lastMessage.sender.email !== session.data?.user?.email) {
+                return lastMessage.body;
+            }
+            return "You: " + lastMessage.body
         }
 
         return 'Started a conversation'
@@ -61,7 +64,7 @@ const ConversationBox: React.FC<ConversationBoxProps> = ({ data, selected }) => 
     }, [lastMessage, session.data?.user?.email])
 
     return (
-        <div className={clsx('w-full relative flex items-center space-x-3 hover:bg-neutral-200 rounded-lg transition cursor-pointer -ml-5 p-2',
+        <div className={clsx('w-full relative flex items-center space-x-3 hover:bg-neutral-200 rounded-lg transition cursor-pointer px-2 py-3',
             selected ? 'bg-neutral-100' : 'bg-white')}
             onClick={handleClick}>
             <Avatar user={otherUser} type='conversation' />
@@ -69,11 +72,8 @@ const ConversationBox: React.FC<ConversationBoxProps> = ({ data, selected }) => 
                 <div className="focus:outline-none">
                     <div className="flex justify-between items-center mb-1">
                         <p className={clsx("text-sm text-gray-900", hasSeen ? "font-semibold" : "font-bold")}>{data.name || otherUser.name}</p>
-                        {lastMessage?.createdAt && (
-                            <p className="text-xs text-gray-400 font-light">{format(new Date(lastMessage.createdAt), 'p')}</p>
-                        )}
                     </div>
-                    <p className={clsx('truncate text-xs', hasSeen ? 'text-gray-500' : 'text-black font-bold')}>{lastMessageText}</p>
+                    <p className={clsx('truncate text-xs', hasSeen ? 'text-gray-500' : 'text-black font-bold')}>{lastMessageText} &#183; {lastMessage?.createdAt && formatDistance(new Date(lastMessage.createdAt), new Date()).replace('about ', '').replace('over ', '').replace('almost ', '')}</p>
                 </div>
             </div>
             {!hasSeen && (<span className={"block rounded-full bg-messenger bottom-1 right-0 w-2 h-2"}></span>)}

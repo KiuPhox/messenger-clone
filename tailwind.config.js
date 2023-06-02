@@ -9,6 +9,9 @@ module.exports = {
     extend: {
       colors: {
         'messenger': '#0084ff',
+      },
+      spacing: {
+        '90': '22.5rem',
       }
     },
   },

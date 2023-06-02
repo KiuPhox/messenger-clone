@@ -19,15 +19,15 @@ const MessageBox: React.FC<MessageBoxProps> = ({ isLast, data }) => {
     const seenList = (data.seen || [])
         .filter((user) => user.email !== data?.sender?.email)
 
-    const container = clsx('flex gap-3 p-4', isOwn && "justify-end")
+    const container = clsx('flex gap-2 p-0.5', isOwn && "justify-end")
 
     const avatar = clsx('self-end', isOwn && "order-2")
 
-    const body = clsx("flex flex-col gap-2", isOwn && "items-end")
+    const body = clsx("flex flex-col gap-0.5", isOwn && "items-end")
 
     const message = clsx("text-sm w-fit overflow-hidden",
         isOwn ? "bg-messenger text-white" : 'bg-gray-200 ',
-        data.image ? "rounded-md p-0" : "rounded-full py-2 px-3")
+        data.image ? "rounded-md p-0" : "rounded-full py-2 px-3.5")
 
     return (
         <div className={container}>
