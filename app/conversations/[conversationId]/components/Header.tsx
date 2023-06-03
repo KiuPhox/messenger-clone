@@ -9,6 +9,7 @@ import Avatar from "@/app/components/Avatar";
 import { HiEllipsisHorizontal } from "react-icons/hi2";
 import ProfileDrawer from "./ProfileDrawer";
 import AvatarGroup from "@/app/components/AvatarGroup";
+import useActiveList from "@/app/hooks/useActiveList";
 
 interface HeaderProps {
     conversation: Conversation & {
@@ -20,11 +21,14 @@ const Header: React.FC<HeaderProps> = ({ conversation }) => {
     const otherUser = useOtherUser(conversation)
     const [drawerOpen, setDrawerOpen] = useState(false)
 
+    const { members } = useActiveList()
+    const isActive = members.indexOf(otherUser?.email!) !== -1
+
     const statusText = useMemo(() => {
         if (conversation.isGroup) return `${conversation.users.length} members`
 
-        return 'Active'
-    }, [conversation])
+        return isActive ? 'Active' : 'Offline'
+    }, [conversation, isActive])
 
     return (
         <div>
@@ -34,7 +38,7 @@ const Header: React.FC<HeaderProps> = ({ conversation }) => {
                     <Link className="lg:hidden block text-messenger transition cursor-pointer" href='/conversations' >
                         <HiChevronLeft size={32}></HiChevronLeft>
                     </Link>
-                    {conversation.isGroup ? (<AvatarGroup users={conversation.users} />) : (<Avatar user={otherUser} type='conversation' />)}
+                    {conversation.isGroup ? (<AvatarGroup users={conversation.users} type="" />) : (<Avatar user={otherUser} type='conversation' />)}
 
                     <div className="flex flex-col">
                         <div className="text-sm font-semibold text-gray-900">

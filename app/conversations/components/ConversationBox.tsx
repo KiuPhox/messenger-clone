@@ -46,23 +46,22 @@ const ConversationBox: React.FC<ConversationBoxProps> = ({ data, selected }) => 
     }, [userEmail, lastMessage])
 
     const lastMessageText = useMemo(() => {
-
         if (lastMessage?.image) {
-            if (lastMessage.sender.email !== session.data?.user?.email)
-                return lastMessage.sender.name + ' sent an image'
+            if (lastMessage?.sender?.email !== session.data?.user?.email && lastMessage?.sender?.name)
+                return lastMessage?.sender?.name + ' sent an image'
             return 'You sent an image'
         }
 
         if (lastMessage?.body) {
-            if (lastMessage.sender.email !== session.data?.user?.email) {
-                return lastMessage.body;
+            if (lastMessage?.sender?.email !== session.data?.user?.email && lastMessage?.sender?.name) {
+                return data.isGroup ? lastMessage?.sender?.name + ': ' + lastMessage.body : lastMessage.body;
             }
             return "You: " + lastMessage.body
         }
 
         return 'Started a conversation'
 
-    }, [lastMessage, session.data?.user?.email])
+    }, [lastMessage, session.data?.user?.email, data])
 
     return (
         <div className={clsx('w-full relative flex items-center space-x-3 hover:bg-neutral-200 rounded-lg transition cursor-pointer px-2 py-3',
