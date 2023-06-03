@@ -9,6 +9,7 @@ import clsx from "clsx"
 import useOtherUser from "@/app/hooks/useOtherUser"
 import { useRouter } from "next/navigation"
 import Avatar from "@/app/components/Avatar"
+import AvatarGroup from "@/app/components/AvatarGroup"
 
 interface ConversationBoxProps {
     data: FullConversationType
@@ -67,7 +68,9 @@ const ConversationBox: React.FC<ConversationBoxProps> = ({ data, selected }) => 
         <div className={clsx('w-full relative flex items-center space-x-3 hover:bg-neutral-200 rounded-lg transition cursor-pointer px-2 py-3',
             selected ? 'bg-neutral-100' : 'bg-white')}
             onClick={handleClick}>
-            <Avatar user={otherUser} type='conversation' />
+            {data.isGroup ? (<AvatarGroup users={data.users} type="" />) :
+                (<Avatar user={otherUser} type='conversation' />)}
+
             <div className="min-w-0 flex-1">
                 <div className="focus:outline-none">
                     <div className="flex justify-between items-center mb-1">
